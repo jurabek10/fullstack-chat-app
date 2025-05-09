@@ -53,7 +53,6 @@ import cors from "cors";
 import { app, server } from "./lib/socket.js";
 import path from "path";
 
-// Load environment variables
 dotenv.config();
 
 const PORT = process.env.PORT || 5001;
@@ -76,10 +75,11 @@ app.use("/api/messages", messageRoutes);
 
 // Serve frontend in production
 if (process.env.NODE_ENV === "production") {
-  const frontendPath = path.resolve(__dirname, "../../../frontend/dist");
-  console.log("Serving static from:", frontendPath);
-  app.use(express.static(frontendPath));
+  const frontendPath = path.resolve(__dirname, "../frontend/dist"); // Adjust path to frontend dist folder
+  console.log("Serving static files from:", frontendPath);
+  app.use(express.static(frontendPath)); // Serve the static files
 
+  // Always return the index.html file for all other routes
   app.get("*", (req, res) => {
     res.sendFile(path.join(frontendPath, "index.html"));
   });
